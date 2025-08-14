@@ -1,0 +1,17 @@
+.ag-root {
+    text-align: center;
+}
+.ag-header-cell-label {
+    justify-content: center;
+}
+
+
+.empty-cell {
+    background-color: rgba(223, 221, 221, 0.3);
+}
+.empty-cell:after {
+    content: '-';
+    color: #999;
+    font-style: italic;
+    font-size: 0.8em;
+}

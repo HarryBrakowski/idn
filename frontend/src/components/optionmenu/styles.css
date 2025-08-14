@@ -1,0 +1,34 @@
+.optionmenu {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    border-radius: 5px;
+    border: 1px solid #6c757d; /* Bootstrap border color */
+    padding: 0px 10px 0px 10px;
+}
+.optionmenu a {
+    color: #6c757d; /* Bootstrap secondary text color */
+    text-decoration: none;
+    height: 100% !important;
+}
+.optionmenu a > span {
+    height: 100%;
+}
+.optionmenu:hover {
+    background-color: #6c757d; /* Bootstrap secondary background color */
+    cursor: pointer;
+}
+.optionmenu:hover a > span {
+    color: #fff; /* Ensure text color changes on hover */
+}
+
+.optionmenu-button {
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+.optionmenu-button:active {
+    background-color: rgb(180, 180, 180);
+}

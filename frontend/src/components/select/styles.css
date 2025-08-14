@@ -1,0 +1,19 @@
+.select-form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+}
+.select-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    margin-bottom: 2px;
+    padding: 0px 2px 2px 2px;
+    width: auto;
+    justify-content: end;
+}
+.select-form-label {
+    margin: 0px 0px 0px 5px;
+    overflow: hidden;
+}

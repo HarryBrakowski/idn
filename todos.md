@@ -1,0 +1,7 @@
+- initialization of the data model when starting the app
+- interactive material options selection (different database calls)
+- robust error handling
+    - duplicate removal -- timestamp increases when saving data to gui_data -- but many values are unchanged -- check combination where material_id, parameter_id and value identical
+    - duplicate handling when trying to register identical materials
+    - duplicate handling when creating identical parameters
+    - pop ups as success and error feedbacks
