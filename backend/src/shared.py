@@ -1,3 +1,4 @@
 from pathlib import Path
 
-path2db = Path(__file__).parent.parent / 'app.db'
+_env_ = 'dev' # dev or prod
+db_path = Path(__file__).parent / f'app_{_env_}.db'

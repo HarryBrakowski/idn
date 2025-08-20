@@ -1,7 +1,10 @@
 import './styles.css';
 import Select from 'react-select'; // additional package for multiselect dropdowns
 
-// options to be provided in the form [{field:'', label: '', ..}, {..}, ..]
+
+// INFO:
+//  options: to be provided in the form [{field:'', label: '', ..}, {..}, ..]
+
 function MultiSelect({id, options, className, selectedValues, setSelectedValues}) {
     // harmonize options --> react-select requires value, label
     options = options.map(opt => ({...opt, ['value']:opt.field}));

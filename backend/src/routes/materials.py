@@ -1,104 +1,87 @@
-from uuid import uuid4
 from flask import request, jsonify
-from src.apis.sqlite_api import SqliteApi
-import src.model as model
-from src.shared import path2db
+from src.model.model import Material, MaterialSelectOption
+from src.apis.alchemy_base import SessionLocal
+
+
 
 def register_routes(app):
 
-    @app.route("/api/v1/register-materials", methods=["POST"])
-    def register_materials():
+    @app.route("/api/v1/materials/schema", methods=["GET"])
+    def get_materials_schema():
+        '''
+        Get the aggrid schema defined via ORM - info argument
+        '''
+        schema = []
+
+        with SessionLocal() as session:
+
+            # get all selectable options for material definition
+            opts_all = session.query(MaterialSelectOption).all()
+
+            # dynamically construct the schema based on info argument in ORM object 'Material'
+            for col in Material.__table__.columns:
+                if col.info:
+                    info = col.info.copy()
+
+                    # handle select option population
+                    if col.info.get('type') == 'select':
+
+                        # filter for matching column_names
+                        opts = {opt.id: opt.label for opt in opts_all if opt.materials_column_name==info['field']}
+
+                        # construct the array of field-label dicts
+                        info['options'] = [{'field': k, 'label': v} for k,v in opts.items()]
+                    
+                    schema.append(info)
+        return jsonify(schema)
+
+
+
+    @app.route("/api/v1/materials/submit-options", methods=["POST"])
+    def submit_material_options():
         data = request.json
-        print("Received frontend data for api-call '/api/v1/register-materials'")
+        print("Received frontend data for api-call '/api/v1/materials/submit-options': ", data)
 
-        # add uuid to each row of rowData
-        column_spec = data['schema'] + [{'type': 'text', 'field': 'id'}]
-        row_data = data['rowData']
-        for row in row_data:
-            row['id'] = str(uuid4())
+        if data.get("rowData") is None:
+            return jsonify('Error during api-call "/api/v1/materials/submit-options". rowData is "None".')
 
-        # write data to sqlite database
-        with SqliteApi(path2db) as slapi:
-            slapi.write_table(
-                column_spec=column_spec,
-                row_data=row_data, 
-                table='materials',
-                append=True
-            )
+        new_options = []
+        for row in data.get("rowData"):
+            new_option = MaterialSelectOption(materials_column_name=row.get('material_feature'), label=row.get('option'))
+            new_options.append(new_option)
 
-            df = slapi.get_table(table='materials')
-            print(df)
-        return jsonify('recieved frontend data for api-call "/api/v1/register-materials"')
+        with SessionLocal() as session:
+            session.add_all(new_options)
+            session.commit()
+
+        return jsonify('response from api-call "/api/v1/materials/submit-options"')
 
 
 
-    @app.route("/api/v1/get-materials-and-data", methods=["POST"])
-    def get_materials_and_data():
+    @app.route("/api/v2/materials/register", methods=["POST"])
+    def register_new_materials():
         data = request.json
-        print("Received frontend data for api-call '/api/v1/get-materials-and-data'", data)
+        print("Received frontend data for api-call '/api/v2/materials/register': ", data)
 
-        # construct the json output
-        output = {'materials': '', 'data': ''}
+        if data.get('rowData', None) is None:
+            return jsonify('Error during api-call "/api/v2/materials/register". rowData is "None".')
 
-        # get the data of interest
-        with SqliteApi(path2db) as slapi:
-            # initialize the data table 'gui_data' - if not exists
-            slapi.initialize_empty_table(
-                table='gui_data',
-                column_spec=model.gui_data_spec
+        new_materials = []
+        for row in data.get('rowData'):
+            m = Material(
+                project=row.get('project'),
+                department=row.get('department'),
+                procedure=row.get('procedure'),
+                procedure_spec=row.get('procedure_spec'),
+                unit_procedure=row.get('unit_procedure'),
+                operation=row.get('operation'),
+                date=row.get('date'),
+                description=row.get('description'),
             )
+            new_materials.append(m)
 
-            # get the selected / matching materials first # TODO match with selected attributes
-            df_materials = slapi.get_table(table='materials')
+        with SessionLocal() as session:
+            session.add_all(new_materials)
+            session.commit()
 
-            if df_materials is not None:
-                print('fetched materials dataframe', df_materials)
-                output['materials'] = df_materials.to_dict(orient='records')
-
-
-            # get the ids of interest
-            material_ids = df_materials['id'].tolist() if df_materials is not None else []
-            parameter_ids = [row['id'] for row in data['selectedParameters']['parameters']]
-
-            # convert them to valid strings
-            parameter_ids_sql = ", ".join(f"'{pid}'" for pid in parameter_ids)
-            material_ids_sql = ", ".join(f"'{mid}'" for mid in material_ids)
-
-            # then fetch all data matching these material_ids and the selected parameters
-            columns = [
-                "materials.*", 
-                "gui_data.material_id", 
-                "gui_data.parameter_id", 
-                "gui_data.value", 
-                "latest.max_ts"
-            ]
-            sql_filter = f"""
-                LEFT JOIN
-                    gui_data ON gui_data.material_id = materials.id
-                INNER JOIN (
-                    SELECT 
-                        material_id, 
-                        parameter_id, 
-                        MAX(timestamp) AS max_ts
-                    FROM gui_data
-                        GROUP BY material_id, parameter_id
-                ) latest
-                    ON gui_data.material_id = latest.material_id
-                    AND gui_data.parameter_id = latest.parameter_id
-                    AND gui_data.timestamp = latest.max_ts
-                WHERE
-                    gui_data.parameter_id IN ({parameter_ids_sql}) AND
-                    materials.id IN ({material_ids_sql})
-            """
-            df_data = slapi.get_table(table='materials', sql_filter=sql_filter, columns=columns)
-
-            if df_data is not None:
-                print('parameter data: ', df_data)
-                output['data'] = df_data.to_dict(orient='records')
-
-            cols = ['material_id', 'parameter_id', 'MAX(timestamp) AS max_ts']
-            sql_filter = f"""WHERE timestamp IS NOT NULL GROUP BY material_id, parameter_id"""
-            df_test = slapi.get_table(table='gui_data', sql_filter=sql_filter, columns=cols)
-            print(df_test)
-
-        return jsonify(output)
+        return jsonify('response from api-call "/api/v2/materials/register"')

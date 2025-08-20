@@ -1,0 +1,23 @@
+.select-options-page-wrapper {
+    height: calc(100vh - 60px); /* Adjust for navbar height */
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: #f8f9fa;
+}
+.grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+}
+.grid-header {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    font-weight: bold;
+    font-size: 25px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}

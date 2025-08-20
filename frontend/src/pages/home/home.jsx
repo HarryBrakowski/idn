@@ -8,7 +8,8 @@ function Home() {
             <div className="w-50 d-flex flex-column align-items-center" style={{fontSize:'15px'}}>
                 <b>Introduction</b>
                 <p>
-                    This app is a prototype demonstrating how simple manual data capturing can be in product- or material-centric environments.
+                    This app is a prototype demonstrating how simple and flexible manual data capturing can be in 
+                    product- or material-centric environments.
                 </p>
                 
                 <b>Why?</b>
@@ -18,41 +19,44 @@ function Home() {
                 </p>
                 <p>
                     Making data accessible without slowing down the capture process is key. People cannot spend hours on data entry 
-                    instead of focusing on value-generating tasks. This prototype shows a very efficient approach to define materials 
-                    and assign data in a familiar, spreadsheet-like interface.
+                    instead of focusing on value-generating tasks. This prototype shows an efficient approach to define materials 
+                    and parameters in a familiar, spreadsheet-like interface.
                 </p>
+                
                 <b>How?</b>
                 <p>
-                    This prototype is built around a flexible meta-data management approach. You first define the parameters 
-                    you want to capture, which are stored in a structured backend. Materials can then be registered and combined with these parameters, 
-                    and corresponding values entered in a simple, spreadsheet-like interface.
+                    The core of this prototype is a flexible meta-data management system. 
+                    You can dynamically define parameter- and material-specific select options, which serve as the foundation for:
+                    <br/>a) defining new parameters of interest, and  
+                    <br/>b) registering new materials.  
                 </p>
                 <p>
-                    The structure of materials and their associated parameters is dynamic: you can add or modify fields, define dropdown selections, 
-                    or change data types at any time. This flexibility allows you to adapt the system to different projects, departments, or procedures 
-                    without changing the core application. All captured data is consistently stored and timestamped, making it traceable and auditable.
+                    Once parameters and materials are set up, corresponding values can be entered directly in a spreadsheet-like UI. 
+                    All data is saved with timestamps, ensuring full traceability and historical tracking. 
+                    This makes the app highly adaptable across different projects, departments, or procedures—without requiring any code changes.
                 </p>
                 <p>
-                    In short, the app demonstrates how a well-designed meta-data framework can make manual data entry both efficient and adaptable, 
-                    while keeping the system extensible for future use.
+                    In short: the app demonstrates how dynamic meta-data and option management can make manual data entry 
+                    both efficient and adaptable, while keeping the system extensible for future use.
                 </p>
+
             </div>
             <br/>
             <div className="w-50 d-flex flex-column align-items-center" style={{fontSize:'15px'}}>
                 <b>Quick Guide</b>
                 <ol>
-                    <li>Define the specific parameters you want to capture (Meta Data Management / Define Your Parameters).</li>
-                    <li>Define the materials you manufacture, develop, or create (Data Input / Register New Material(s)).</li>
+                    <li>Define the specific parameters you want to capture, including select options if needed.</li>
+                    <li>Register your materials, with their own dynamic select options if applicable.</li>
                     <li>
                         Add your data on the "Data Input / Add Data" page:
                         <ol>
-                            <li>Query your materials of interest using the filter criteria (top-left block).</li>
-                            <li>Select the parameters you want to add data for.</li>
-                            <li>Click 'Get your Data' to retrieve matching materials and existing data.</li>
-                            <li>Enter your data in the table rendered next to each material and parameter, then press 'Submit'.</li>
+                            <li>Filter materials of interest.</li>
+                            <li>Select parameters you want to capture data for.</li>
+                            <li>Click <i>Get your Data</i> to retrieve matching materials and existing values.</li>
+                            <li>Enter your data in the editable table, then press <i>Submit</i>.</li>
                             <li>
-                                All data is saved in the backend with a timestamp. Nothing is overwritten, so historical values 
-                                and changes can be traced back to the respective time points.
+                                All data is saved in the backend with a timestamp. Nothing is overwritten, 
+                                so historical values and changes remain traceable.
                             </li>
                         </ol>
                     </li>
@@ -61,4 +65,6 @@ function Home() {
         </div>
     );
 };
+
 export default Home;
+

@@ -6,12 +6,11 @@ import plusIcon from '../../assets/img/plus-icon.png';
 import minusIcon from '../../assets/img/minus-icon.png';
 import { handleClickAddRow, handleClickRemoveRows } from './callbacks';
 import { createEmptyRow } from '../../components/grid/column_defs';
-import { handleClickRegisterMaterials } from '../../api-calls/api-calls';
 
 
 
 // wraps the input grid component plus additional UI elements like adding new rows and columns
-function RegisterDataPage({ schema, rowData, setRowData, onSubmit }) {
+function RegisterDataPage({ schema, rowData, setRowData, onSubmit, height='70%', width='80%' }) {
 
     // get a reference to the grid
     const gridRef = useRef();
@@ -45,7 +44,7 @@ function RegisterDataPage({ schema, rowData, setRowData, onSubmit }) {
                 </Button>
             </div>
 
-            <div style={{ height: '70%', width: '80%' }}>
+            <div style={{ height: height, width: width }}>
                 <DataGrid schema={schema} rowData={rowData} setRowData={setRowData} gridRef={gridRef} />
             </div>
 

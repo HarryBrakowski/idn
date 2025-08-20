@@ -6,15 +6,16 @@ import SelectForm from '../../components/select/select';
 import DataGrid from '../../components/grid/grid';
 import searchIcon from '../../assets/img/search-icon.png';
 import uploadIcon from '../../assets/img/upload-icon.png';
-import {getParameters, handleClickGetMaterialData, handleClickSubmitData} from '../../api-calls/api-calls';
+import {handleClickGetInputData, handleClickSubmitInputData} from '../../api-calls/api-calls';
 
 
 
-// wraps the input grid component plus additional UI elements like adding new rows and columns
-function AddDataPage({schema}) {
-    // options for select components
-    const [parameterOptions, setParameterOptions] = useState([]) // could be moved to collective data fetching during app startup
-    const [materialOptions, setMaterialOptions] = useState([])  // TODO
+// wraps the register-data component plus additional UI elements like adding new rows and columns
+function AddDataPage({schema, parameterOptions}) {
+    // initialize rowData
+    const [databaseRowData, setDatabaseRowData] = useState([]); // set via api call "handleClickGetInputData" only
+    const [rowData, setRowData] = useState([]); // set by databaseRowData and changed by grid editing
+    useEffect(() => setRowData(databaseRowData.map((node) => ({...node}))), [databaseRowData]);
 
     // initialize the selected data object -- initial values are set within the SelectForm component
     const [selectedMaterialValues, setSelectedMaterialValues] = useState({});
@@ -23,14 +24,6 @@ function AddDataPage({schema}) {
     // get a reference to the grid
     const materialGridRef = useRef();
     const parameterGridRef = useRef();
-
-    // initialize rowData
-    const [rowData, setRowData] = useState([]); // fetched via api call ....
-
-    // fetch parameter options and bring it in the required field-label form
-    useEffect(() => {
-        getParameters('parameters', setParameterOptions);
-    }, [])
 
 
     return (
@@ -42,7 +35,7 @@ function AddDataPage({schema}) {
                     <div style={{fontWeight:'bold', fontSize:"20px"}} >Select your Materials</div>
 
                     <SelectForm 
-                        schema={schema} 
+                        schema={schema.filter(c => c.type=='select')} 
                         selectedValues={selectedMaterialValues} 
                         setSelectedValues={setSelectedMaterialValues}
                     />
@@ -66,14 +59,14 @@ function AddDataPage({schema}) {
                     variant="secondary" 
                     className='d-flex gap-2 m-2' 
                     style={{width: '170px'}} 
-                    onClick={() => handleClickGetMaterialData(selectedMaterialValues, selectedParameters, setRowData)}
+                    onClick={() => handleClickGetInputData(selectedMaterialValues, selectedParameters, setDatabaseRowData)}
                 >
                     <img draggable={false} alt="searchIcon" src={searchIcon} height="25" width="25" />
                     <div>Get your Data</div>
                 </Button>
             </div>
 
-            <div className='grid-wrapper'>
+            <div className='data-grid-wrapper'>
                 <div style={{ height: 'calc(100% - 0px)', width: '50%', marginRight:'10px'}}>
                     <DataGrid 
                         schema={schema} 
@@ -98,7 +91,7 @@ function AddDataPage({schema}) {
             </div>
 
             <div className='w-100 d-flex flex-column align-items-end pe-5'>
-                <Button variant="secondary" className='d-flex gap-2 m-2' style={{width: '220px'}} onClick={() => handleClickSubmitData(rowData, selectedParameters)}>
+                <Button variant="secondary" className='d-flex gap-2 m-2' style={{width: '220px'}} onClick={() => handleClickSubmitInputData(databaseRowData, rowData, selectedParameters)}>
                     <img draggable={false} alt="uploadIcon" src={uploadIcon} height="25" width="25" />
                     <div>Submit Entered Data</div>
                 </Button>

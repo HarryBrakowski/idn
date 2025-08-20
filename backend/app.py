@@ -1,9 +1,13 @@
 from flask import Flask, send_from_directory
 from flask_cors import CORS
+from src.apis.alchemy_base import Base, engine
 
 from src.routes.materials import register_routes as register_routes_materials
 from src.routes.parameters import register_routes as register_routes_parameters
 from src.routes.data import register_routes as register_routes_data
+
+# Init Database Model
+Base.metadata.create_all(engine)
 
 # app
 app = Flask(__name__, static_folder='build', static_url_path='')
@@ -13,6 +17,7 @@ cors = CORS(app,
     methods=["GET", "POST", "OPTIONS"],
     supports_credentials=True
 )
+
 
 # Serve the static React files
 @app.route('/')

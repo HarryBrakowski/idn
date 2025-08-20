@@ -1,3 +1,12 @@
+// delete as soon its coming from backend
+export const defaultTypes = [
+    {field: 'select', label: 'Select Type'},
+    {field: 'number', label: 'Number Type'},
+    {field: 'text', label: 'Text Type'},
+    {field: 'largeText', label: 'Long Text Type'},
+    {field: 'date', label: 'Date Type'},
+]
+
 // InputGrid type definitions
 export const typeText = (field, label, maxLength) => {
     return ({
@@ -10,7 +19,7 @@ export const typeText = (field, label, maxLength) => {
         },
         cellEditor: 'agTextCellEditor',
         cellEditorParams: {
-            maxLength: maxLength || 20,
+            maxLength: maxLength || 30,
         },
     })
 };
@@ -34,31 +43,32 @@ export const typeNumber = (field, label, maxDecimalPlaces) => {
     return ({
         field: field,
         headerName: label,
-        valueGetter: (params) => params.data[field] || null, // important to force empty cells to store ""
+        valueGetter: (params) => params.data[field] || null, // important to force empty cells to store null
         valueSetter: (params) => {
             params.data[field] = params.newValue;
             return true;
         },
         cellEditor: 'agNumberCellEditor',
         cellEditorParams: {
-            precision: maxDecimalPlaces || 2,
+            precision: maxDecimalPlaces || 12,
             preventStepping: true
         }
     })
 };
 export const typeSelect = (field, label, options) => {
-    const fields = options.map(option => option.field || '');
+    const opts = Array.isArray(options) ? options : [{field:'', label:''}];
+    const fields = opts.map(option => option.field || '');
 
     return {
         field: field,
         headerName: label,
         cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
-            values: fields || [{field: '', label: ''}],
+            values: fields,
         },
         // make sure to render the label - while working with the field value in all other cases
         valueFormatter: (params) => {
-            const match = options.find(opt => opt.field === params.value);
+            const match = opts.find(opt => opt.field === params.value);
             return match ? match.label : params.value;
         },
         valueParser: (params) => {
@@ -66,11 +76,10 @@ export const typeSelect = (field, label, options) => {
         },
         // ensure this field is always a valid option
         onCellValueChanged: (params) => {
-            console.log(params.data[field]);
             // if the value is not in the options, reset it to the first option
             if (!params.data[field] || !fields.includes(params.data[field])) {
                 params.data[field] = fields[0] || '';
-                params.api.refreshCells({ rowNodes: [params.node], force: true });
+                params.api.refreshCells({ force: true });
             }
         }
     }

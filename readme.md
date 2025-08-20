@@ -1,22 +1,24 @@
-# Data Capture Prototype
+# Industry Data Navigator (IDN)
 
 ## 🚀 Introduction
 
-Welcome to this **Data Capture Prototype**!  
+Welcome to the **Industry Data Navigator (IDN)** prototype!  
 
-This project demonstrates the simplicity and efficiency of **manual data capturing** in product- or material-centric environments. Many teams and organizations today still rely on unstructured formats such as spreadsheets, PDFs, Word documents, or even memory to track their data. This prototype shows a more structured approach while keeping the process lightweight and intuitive.
+This project demonstrates the simplicity and efficiency of **manual data capturing** in product- or material-centric environments. Many teams and organizations today still rely on unstructured formats such as spreadsheets, PDFs, Word documents, or even memory to track their data. This prototype shows a more structured approach while keeping the process lightweight and intuitive.  
 
-The core idea is **meta data management** for defining parameters you want to capture, and registering materials to which these parameters apply. The system allows for **dynamic parameter types**, including dropdown selections, text, and dates — all stored in a backend SQLite database.  
+The core idea is **meta data management** for defining parameters you want to capture, and registering materials to which these parameters apply. The system allows for **dynamic parameter types**, including dropdown selections, text, and dates — all stored in a backend database.  
+Furthermore, it **standardizes the approach of assigning external IDs**, enabling automated data retrieval from other systems in external ETL/ELT pipelines.  
 
-The backend exposes a **custom API using Flask**, which interacts with the database via raw SQL queries, making it simple, fast, and flexible. While currently using raw SQL and SQLite for prototyping, the architecture allows switching to an ORM or other database engines easily.  
+The backend exposes a **Flask-based REST API**. Data persistence is handled with **SQLAlchemy ORM** on top of SQLite. This ensures a robust and dynamic data model, while keeping the flexibility to easily switch to other relational databases (e.g., PostgreSQL, MySQL) without major code changes.  
 
 The frontend is built with **React**, leveraging **React-Bootstrap** for styling and **AG Grid** for a spreadsheet-like data entry experience.  
+
 
 ---
 
 ## 🛠 Technology Stack
 
-- **Backend:** Flask, Python 3  
+- **Backend:** Flask, Python 3, SQLAlchemy ORM
 - **Database:** SQLite (embedded, used as a test/demo database)  
 - **Frontend:** React, React-Bootstrap, AG Grid  
 - **Communication:** REST API between React frontend and Flask backend  
@@ -25,11 +27,11 @@ The frontend is built with **React**, leveraging **React-Bootstrap** for styling
 
 ## 🎯 Purpose and Usage
 
-- Define parameters to capture (meta data).  
-- Register materials and assign them meta data.  
+- Dynamically define parameters to capture (meta data). 
+- Define and register materials, with flexible select-options and parameter assignment.  
 - Enter material data efficiently in a spreadsheet-like interface.  
 - Historical data is preserved with timestamps, allowing traceability of changes.  
-- Lightweight, fast, and flexible — ideal for prototyping or small-scale deployment.  
+- Highly adaptable across projects, departments, or procedures thanks to dynamic schema and ORM-based backend.
 
 ---
 

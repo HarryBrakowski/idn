@@ -1,7 +1,17 @@
-- initialization of the data model when starting the app
-- interactive material options selection (different database calls)
+- Connect Scrolling behavior in both add data tables
+- reupdate database data in add-data after submitting data
+
+
+- Data Input / Add Data:
+    - Dynamic Dropdown Population based on previous selection
+
+-Dashboard: 
+    - Introduce some date picker / date interval picker
+
 - robust error handling
-    - duplicate removal -- timestamp increases when saving data to gui_data -- but many values are unchanged -- check combination where material_id, parameter_id and value identical
     - duplicate handling when trying to register identical materials
     - duplicate handling when creating identical parameters
-    - pop ups as success and error feedbacks
+
+- pop ups as success and error feedbacks
+    - when successfully submitted data
+    - when data submission error -- e.g. parameter selected but not re-updated before pushing new data -- implement some smart automation

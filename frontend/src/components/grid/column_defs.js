@@ -51,7 +51,7 @@ export const createEmptyRow = (schema) => {
                 break;
             case 'select':
                 // take care: select type must receive an object with field and label
-                rowData[col.field] = col.options && col.options.length > 0 ? col.options[0]['field'] : {field: '', label: ''}; // Default to first option if available;
+                rowData[col.field] = col.options && col.options.length > 0 ? col.options[0]['field'] : ''; // Default to first option if available;
                 break;
             case 'date':
                 rowData[col.field] = new Date().toISOString().split('T')[0]; // Default to today's date
