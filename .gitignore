@@ -25,6 +25,7 @@ __pycache__/
 *.pyo
 *.pyd
 *.env
+*.env.local
 *.venv
 env/
 venv/
@@ -65,3 +66,5 @@ dist-packages/
 *.tmp
 *.temp
 *.log.*
+
+.vercel

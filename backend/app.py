@@ -12,7 +12,7 @@ Base.metadata.create_all(engine)
 # app
 app = Flask(__name__, static_folder='build', static_url_path='')
 cors = CORS(app,
-    resources={ r"/api/*": { "origins": ["http://localhost:*"] } },
+    resources={ r"/api/*": { "origins": ["http://localhost:*", "https://idn-sigma.vercel.app"] } },
     allow_headers=["*"],
     methods=["GET", "POST", "OPTIONS"],
     supports_credentials=True

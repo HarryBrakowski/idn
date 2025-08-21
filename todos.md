@@ -1,3 +1,4 @@
+- Add some text field as Batch / Experiment Identifier
 - Connect Scrolling behavior in both add data tables
 - reupdate database data in add-data after submitting data
 
@@ -13,5 +14,6 @@
     - duplicate handling when creating identical parameters
 
 - pop ups as success and error feedbacks
+    - trigger csv download upon material registration
     - when successfully submitted data
     - when data submission error -- e.g. parameter selected but not re-updated before pushing new data -- implement some smart automation

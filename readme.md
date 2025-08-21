@@ -1,4 +1,5 @@
 # Industry Data Navigator (IDN)
+### For a quick hands-on impression (no setup required), simply visit: https://idn-sigma.vercel.app/
 
 ## 🚀 Introduction
 

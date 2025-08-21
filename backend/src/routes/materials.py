@@ -72,11 +72,11 @@ def register_routes(app):
                 project=row.get('project'),
                 department=row.get('department'),
                 procedure=row.get('procedure'),
-                procedure_spec=row.get('procedure_spec'),
                 unit_procedure=row.get('unit_procedure'),
                 operation=row.get('operation'),
-                date=row.get('date'),
+                name=row.get('name'),
                 description=row.get('description'),
+                date=row.get('date')
             )
             new_materials.append(m)
 
