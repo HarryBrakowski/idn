@@ -7,6 +7,7 @@ from src.routes.parameters import register_routes as register_routes_parameters
 from src.routes.data import register_routes as register_routes_data
 
 # Init Database Model
+print("Connected to:", engine.url)
 Base.metadata.create_all(engine)
 
 # app

@@ -1,13 +1,30 @@
+import os
 from sqlalchemy.orm import sessionmaker, scoped_session, DeclarativeBase
 from sqlalchemy import create_engine, and_
 from src.shared import db_path
 
 
-# Connection
-engine = create_engine(f"sqlite+pysqlite:///{db_path}", echo=True)
+# Connection via environment variable
+DATABASE_URL = os.getenv("DATABASE_URL", default="")
+# include psycopg2 for sqlalchemy
+if DATABASE_URL and DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 
+# sqlite as fallback option
+if not DATABASE_URL:
+    DATABASE_URL = f"sqlite+pysqlite:///{db_path}"
+
+# actual connection
+engine = create_engine(
+    DATABASE_URL,
+    pool_size=5,
+    max_overflow=5,
+    pool_timeout=30,
+    pool_recycle=1800
+)
 # Session factory
 SessionLocal = scoped_session(sessionmaker(bind=engine, autoflush=False, autocommit=False))
+
 
 # Base Model
 class Base(DeclarativeBase):

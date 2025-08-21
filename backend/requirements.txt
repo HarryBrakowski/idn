@@ -2,4 +2,5 @@ flask==3.1.1
 flask-cors==6.0.1
 pandas==2.3.1
 SQLAlchemy==2.0.43
-gunicorn==23.0.0 # for deployment (e.g. on railway)
+gunicorn==23.0.0 # specific for railway
+psycopg2-binary # specific for railway
