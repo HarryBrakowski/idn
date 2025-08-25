@@ -76,7 +76,6 @@ def register_routes(app):
                 operation=row.get('operation'),
                 name=row.get('name'),
                 description=row.get('description'),
-                date=row.get('date')
             )
             new_materials.append(m)
 

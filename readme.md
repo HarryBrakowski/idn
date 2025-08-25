@@ -20,7 +20,7 @@ The frontend is built with **React**, leveraging **React-Bootstrap** for styling
 ## 🛠 Technology Stack
 
 - **Backend:** Flask, Python 3, SQLAlchemy ORM
-- **Database:** SQLite (embedded, used as a test/demo database)  
+- **Database:** SQLite (embedded, lokal use), PostGreSQL (https://idn-sigma.vercel.app/)
 - **Frontend:** React, React-Bootstrap, AG Grid  
 - **Communication:** REST API between React frontend and Flask backend  
 
@@ -55,6 +55,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Start the backend server
+setx INITIALIZE_DATA 1 # optional, to initialize the model with test data
 python app.py
 ```
 The Flask server will start and listen on http://127.0.0.1:5000 by default.  

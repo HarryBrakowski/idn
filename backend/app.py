@@ -1,7 +1,8 @@
+import os
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from src.apis.alchemy_base import Base, engine
-
+from src.model.init_data import init_data
 from src.routes.materials import register_routes as register_routes_materials
 from src.routes.parameters import register_routes as register_routes_parameters
 from src.routes.data import register_routes as register_routes_data
@@ -9,6 +10,8 @@ from src.routes.data import register_routes as register_routes_data
 # Init Database Model
 print("Connected to:", engine.url)
 Base.metadata.create_all(engine)
+if os.getenv("INITIALIZE_DATA") == "1":
+    init_data()  # populate initial data -- if environment variable is set to "1"
 
 # app
 app = Flask(__name__, static_folder='build', static_url_path='')

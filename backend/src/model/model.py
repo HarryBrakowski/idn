@@ -2,11 +2,8 @@ from datetime import datetime, timezone
 from uuid import uuid4
 from sqlalchemy import Integer, String, DateTime, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from src.apis.alchemy_base import Base, engine, SessionLocal
+from src.apis.alchemy_base import Base
 from src.model.frontend_types import aggrid_types
-
-# NOTE: 
-#   execute as main (from backend): python -m src.model.model
 
 
 class Material(Base):
@@ -51,15 +48,11 @@ class Material(Base):
     )
     name: Mapped[str] = mapped_column(
         String(30),
-        info={"type": "text", "field": "name", "label": "Name", "maxLength": 25}
+        info={"type": "text", "field": "name", "label": "Material Name", "maxLength": 25}
     )
     description: Mapped[str | None] = mapped_column(
         String(100), 
         info={"type": "largeText", "field": "description", "label": "Description", "maxLength": 100}
-    )
-    date: Mapped[str] = mapped_column(
-        String(100), 
-        info={"type": "date", "field": "date", "label": "Date of Execution"}
     )
 
 
@@ -134,74 +127,3 @@ class InputValue(Base):
 
 
 
-def init_db():
-    Base.metadata.create_all(engine)
-
-    with SessionLocal() as session:
-        par_opts = [
-            ParameterSelectOption(parameters_column_name='group', label='Mass Balance'), # id 1
-            ParameterSelectOption(parameters_column_name='group', label='Quality Control'), # id 2...
-            ParameterSelectOption(parameters_column_name='group', label='External Identifier'),
-            ParameterSelectOption(parameters_column_name='group', label='Process Parameter'),
-            ParameterSelectOption(parameters_column_name='group', label='Equipment'),
-            ParameterSelectOption(parameters_column_name='unit', label=''),
-            ParameterSelectOption(parameters_column_name='unit', label='%'),
-            ParameterSelectOption(parameters_column_name='unit', label='g/L'),
-            ParameterSelectOption(parameters_column_name='unit', label='g'),
-            ParameterSelectOption(parameters_column_name='unit', label='L'),
-        ]
-        session.add_all(par_opts)
-        session.commit()
-
-        pars = [
-            Parameter(type='number', group_id=1, name='Product Mass', unit_id=9),
-            Parameter(type='number', group_id=2, name='Product Purity', unit_id=7),
-            Parameter(type='text', group_id=3, name='LIMS - Material ID', unit_id=6),
-        ]
-        session.add_all(pars)
-        session.commit()
-
-        mat_opts = [
-            MaterialSelectOption(materials_column_name='project', label='Project A'), #1
-            MaterialSelectOption(materials_column_name='project', label='Project B'), #2
-            MaterialSelectOption(materials_column_name='department', label='Department A'), #3
-            MaterialSelectOption(materials_column_name='procedure', label='Lab Experiment'), #4
-            MaterialSelectOption(materials_column_name='procedure', label='Batch Manufacture'), #5
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Column Chromatography'), #6
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Dead End Filtration'), #7
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Tangential Flow Filtration'), #8
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Formulation'), #9
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Product Conditioning'), #10
-            MaterialSelectOption(materials_column_name='operation', label='pH Adjustment'), #11
-            MaterialSelectOption(materials_column_name='operation', label='Conductivity Adjustment'), #12
-            MaterialSelectOption(materials_column_name='operation', label='Concentration Adjustment'), #13
-            MaterialSelectOption(materials_column_name='operation', label='Chromatography - Elution'), #14
-            MaterialSelectOption(materials_column_name='operation', label='Chromatography - Wash'), #15
-            MaterialSelectOption(materials_column_name='operation', label='Product Transfer'), #16
-            MaterialSelectOption(materials_column_name='operation', label='Additive Addition'), #17
-            MaterialSelectOption(materials_column_name='operation', label='Temperature Adjustment'), #18
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Seed Train'), #19
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Batch Fermentation'), #20
-            MaterialSelectOption(materials_column_name='unit_procedure', label='Fed Batch Fermentation'), #21
-            MaterialSelectOption(materials_column_name='operation', label='Incubation'), #22
-            MaterialSelectOption(materials_column_name='operation', label='Stirring'), #23
-            MaterialSelectOption(materials_column_name='operation', label='Chromatography - Flowthrough'), #24
-        ]
-        session.add_all(mat_opts)
-        session.commit()
-
-        mats = [
-            Material(project=1, department=3, procedure=5, unit_procedure=19, operation=22, name="Seed Train", description="", date="2025-08-20"),
-            Material(project=1, department=3, procedure=5, unit_procedure=21, operation=22, name="Harvest", description="", date="2025-08-25"),
-            Material(project=1, department=3, procedure=5, unit_procedure=7, operation=16, name="Clarified Harvest", description="", date="2025-08-25"),
-            Material(project=1, department=3, procedure=5, unit_procedure=6, operation=14, name="CHR Eluate", description="", date="2025-08-26"),
-            Material(project=1, department=3, procedure=5, unit_procedure=10, operation=17, name="Virus Inactivated Intermediate", description="", date="2025-08-26"),
-            Material(project=1, department=3, procedure=5, unit_procedure=6, operation=24, name="CHR Flowthrough", description="", date="2025-08-27"),
-            Material(project=1, department=3, procedure=5, unit_procedure=8, operation=13, name="TFF Concentrate", description="", date="2025-08-27"),
-            Material(project=1, department=3, procedure=5, unit_procedure=9, operation=17, name="Formulated Product", description="", date="2025-08-28"),
-        ]
-        session.add_all(mats)
-        session.commit()
-        
-if __name__ == "__main__":
-    init_db()
